@@ -50,7 +50,7 @@ export class UsersService {
             throw new IncorrectPassword();
         }
 
-        const payload = { sub: existingUser.id, email: existingUser.email };
+        const payload = { sub: existingUser.id, email: existingUser.email, role: existingUser.role.name };
         const token = await this.jwtService.signAsync(payload);
         return {
             user: {

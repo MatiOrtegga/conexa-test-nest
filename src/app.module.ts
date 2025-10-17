@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database.config';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { RolesGuard } from './common/guards/roles.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -13,7 +16,15 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     TypeOrmModule.forRootAsync(databaseConfig),
     ScheduleModule.forRoot(),
-    UsersModule, MoviesModule
+    UsersModule,
+    MoviesModule,
+    JwtModule
   ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ]
 })
 export class AppModule { }

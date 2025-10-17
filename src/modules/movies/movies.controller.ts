@@ -4,6 +4,7 @@ import { MoviesService } from './movies.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { CreateMovieDto } from './dto/create-movie.dto';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('movies')
 export class MoviesController {
@@ -18,7 +19,7 @@ export class MoviesController {
         return this.moviesService.findAll();
     }
 
-    @Public()
+    @Roles(['user'])
     @Get(':id')
     @HttpCode(200)
     @ApiOperation({ summary: 'Get movie by id' })
@@ -26,7 +27,7 @@ export class MoviesController {
         return this.moviesService.findOne(+id);
     }
 
-    @Public()
+    @Roles(['admin'])
     @Post()
     @HttpCode(201)
     @ApiOperation({ summary: 'Create a new movie' })
@@ -34,7 +35,7 @@ export class MoviesController {
         await this.moviesService.create(movieData);
     }
 
-    @Public()
+    @Roles(['admin'])
     @Put(':id')
     @HttpCode(204)
     @ApiOperation({ summary: 'update a existing movie' })
@@ -42,7 +43,7 @@ export class MoviesController {
         await this.moviesService.update(+id, updateMovieDto);
     }
 
-    @Public()
+    @Roles(['admin'])
     @HttpCode(204)
     @ApiOperation({ summary: 'delete a existing movie' })
     @Delete(':id')
