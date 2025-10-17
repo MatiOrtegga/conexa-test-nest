@@ -76,10 +76,31 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.ts",
+      "!main.ts",
+      "!**/*.module.ts",
+      "!**/app.module.ts",
+      "!**/dto/*.ts",
+      "!**/entities/*.ts",
+      "!**/config/**",
+      "!**/filters/**"
     ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 70,
+        "branches": 60,
+        "functions": 60,
+        "lines": 70
+      }
+    },
     "coverageDirectory": "../coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
