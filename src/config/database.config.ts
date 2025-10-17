@@ -1,21 +1,24 @@
-import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 
 export const databaseConfig: TypeOrmModuleAsyncOptions = {
     imports: [ConfigModule],
     inject: [ConfigService],
-    useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        host: config.get<string>('POSTGRES_HOST'),
-        port: parseInt(config.get<string>('POSTGRES_PORT') ?? '5432', 10),
-        username: config.get<string>('POSTGRES_USER'),
-        password: config.get<string>('POSTGRES_PASSWORD'),
-        database: config.get<string>('POSTGRES_DATABASE'),
-        synchronize: config.get<string>('NODE_ENV') === 'DEV',
-        logging: config.get<string>('NODE_ENV') === 'DEV',
-        autoLoadEntities: true,
-        ssl: {
-            rejectUnauthorized: false, 
-        },
-    }),
+    useFactory: (config: ConfigService) => {
+        const isProd = config.get('NODE_ENV') === 'PROD';
+
+        return {
+            type: 'postgres',
+            host: config.get('POSTGRES_HOST'),
+            port: +config.get('POSTGRES_PORT'),
+            username: config.get('POSTGRES_USER'),
+            password: config.get('POSTGRES_PASSWORD'),
+            database: config.get('POSTGRES_DATABASE'),
+            autoLoadEntities: true,
+            synchronize: true,
+            ssl: isProd
+                ? { rejectUnauthorized: false }
+                : false,
+        };
+    },
 };

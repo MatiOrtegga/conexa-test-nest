@@ -17,8 +17,8 @@ export class DatabaseSeederService {
     if (existingRoles === 0) {
       this.logger.log('Seeding roles...');
       await this.roleRepository.save([
-        { name: 'admin' },
         { name: 'user' },
+        { name: 'admin' },
       ]);
       this.logger.log('Roles seeded successfully.');
     } else {
