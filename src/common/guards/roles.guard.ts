@@ -15,7 +15,7 @@ export class RolesGuard implements CanActivate {
     const roles = this.reflector.get(Roles, context.getHandler());
     const isPublic = this.reflector.get<boolean>('isPublic', context.getHandler());
 
-    if(isPublic) {
+    if (isPublic) {
       return true;
     }
 
@@ -24,12 +24,18 @@ export class RolesGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
 
+    const hasBearerToken = request.headers.authorization && request.headers.authorization.startsWith('Bearer ');
+
+    if (!hasBearerToken) {
+      return false;
+    }
+
     const token = request.headers.authorization.split(' ')[1];
     const decodedToken = this.jwtService.decode(token) as { role: string };
-
     if (!decodedToken || !decodedToken.role) {
       return false;
     }
+
 
     if (roles && !roles.includes(decodedToken.role)) {
       return false;

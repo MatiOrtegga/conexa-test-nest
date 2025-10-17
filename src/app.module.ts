@@ -7,8 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RolesGuard } from './common/guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './common/guards/auth.guard';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConfig } from './config/jwt.config';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { AuthGuard } from './common/guards/auth.guard';
     ScheduleModule.forRoot(),
     UsersModule,
     MoviesModule,
-    JwtModule
+    JwtModule.registerAsync(jwtConfig),
   ],
   providers: [
     {
