@@ -1,9 +1,5 @@
-import { applyDecorators, SetMetadata, UseGuards } from "@nestjs/common";
-import { ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { SetMetadata, applyDecorators } from '@nestjs/common';
 
 export function Public() {
-    return applyDecorators(
-        SetMetadata('isPublic', true),
-        ApiUnauthorizedResponse({ description: 'Unauthorized' }),
-    )
+  return applyDecorators(SetMetadata('isPublic', true));
 }
