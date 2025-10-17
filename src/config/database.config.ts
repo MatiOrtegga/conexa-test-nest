@@ -2,7 +2,7 @@ import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 export const databaseConfig: TypeOrmModuleAsyncOptions = {
-    imports: [ConfigModule], 
+    imports: [ConfigModule],
     inject: [ConfigService],
     useFactory: (config: ConfigService) => ({
         type: 'postgres',
@@ -14,5 +14,8 @@ export const databaseConfig: TypeOrmModuleAsyncOptions = {
         synchronize: config.get<string>('NODE_ENV') === 'DEV',
         logging: config.get<string>('NODE_ENV') === 'DEV',
         autoLoadEntities: true,
+        ssl: {
+            rejectUnauthorized: false, 
+        },
     }),
 };
