@@ -4,17 +4,29 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { configSwagger } from './config/swagger.config';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { AuthGuard } from './common/guards/auth.guard';
+import { VersioningType } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  const documentFactory = () => SwaggerModule.createDocument(app, configSwagger);
-  SwaggerModule.setup('swagger', app, documentFactory);
+  const configService = app.get(ConfigService);
 
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
-  
+
+  app.setGlobalPrefix('api');
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
+  const nodeEnv = configService.get<string>('NODE_ENV');
+
+  if (nodeEnv === 'DEV') {
+    const documentFactory = () => SwaggerModule.createDocument(app, configSwagger);
+    SwaggerModule.setup('api/v1/docs', app, documentFactory);
+  }
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
