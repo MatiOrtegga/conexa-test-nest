@@ -6,6 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { DatabaseSeederService } from './database/database-seeder.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,6 +26,10 @@ async function bootstrap() {
   if (nodeEnv === 'DEV') {
     const documentFactory = () => SwaggerModule.createDocument(app, configSwagger);
     SwaggerModule.setup('api/v1/docs', app, documentFactory);
+    
+    //Create roles for first time, for a faster deploy.
+    const seeder = app.get(DatabaseSeederService);
+    await seeder.seed();
   }
 
   await app.listen(process.env.PORT ?? 3000);

@@ -8,8 +8,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { RolesGuard } from './common/guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConfig } from './config/jwt.config';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -18,9 +17,9 @@ import { jwtConfig } from './config/jwt.config';
     }),
     TypeOrmModule.forRootAsync(databaseConfig),
     ScheduleModule.forRoot(),
+    AuthModule,
     UsersModule,
-    MoviesModule,
-    JwtModule.registerAsync(jwtConfig),
+    MoviesModule
   ],
   providers: [
     {
@@ -31,6 +30,7 @@ import { jwtConfig } from './config/jwt.config';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+
   ]
 })
 export class AppModule { }

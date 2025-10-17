@@ -1,0 +1,53 @@
+# Node dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+
+# Build output
+dist
+build
+coverage
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+debug.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor & IDE
+.vscode
+.idea
+*.swp
+
+# Tests
+test
+__tests__
+*.spec.ts
+*.spec.js
+jest.config.js
+jest.config.ts
+coverage
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile*
+docker-compose*
+
+# Misc
+*.md
+*.bak
+*.tmp
+*.old
